@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.env
+.venv/
+venv/
+
+# OS files
+.DS_Store
+
+# FAISS index & generated data
+static/index.faiss
+
+# Torch cache
+.cache/torch/
