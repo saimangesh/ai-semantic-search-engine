@@ -58,7 +58,6 @@ python app.py
 ```
 
 Type a text query in the terminal to retrieve matching images.
-
 ---
 
 ## 📈 Use Cases

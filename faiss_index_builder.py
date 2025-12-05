@@ -2,6 +2,7 @@ from faiss import write_index
 from PIL import Image
 from tqdm import tqdm
 
+# Standard libraries
 import argparse
 import clip
 import faiss
@@ -14,22 +15,27 @@ import torch
 def index(image_dir_path):
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
+    # Load CLIP model and preprocessing pipeline
     model, preprocess = clip.load("ViT-B/32", device=device)
     model.eval()
 
     images = []
     image_paths = []
     img_dir_path = image_dir_path
+    # Traverse image directory
     for animal_name in sorted(os.listdir(img_dir_path)):
         print(animal_name)
+        # Skip files that are not directories
         if not os.path.isdir(os.path.join(img_dir_path, animal_name)):
             continue
+        # Iterate through images in each folder
         for img_file in tqdm(os.listdir(os.path.join(img_dir_path, animal_name))):
             if not img_file.endswith(".jpg"):
                 continue
             image = Image.open(os.path.join(img_dir_path, animal_name, img_file)).convert("RGB")
             images.append(preprocess(image))
             image_paths.append(os.path.join(img_dir_path, animal_name, img_file))
+    # Convert image list into tensor batch
     image_input = torch.tensor(np.stack(images)).to(device)
 
     with torch.no_grad():
@@ -44,7 +50,7 @@ def index(image_dir_path):
     with open("static/image_paths.json", "w") as f:
         json.dump(image_paths, f)
 
-
+# Entry point for command-line execution
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_dir_path", type=str, default="static/data/images")
