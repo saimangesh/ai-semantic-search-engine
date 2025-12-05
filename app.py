@@ -1,6 +1,7 @@
 from faiss import read_index
 from PIL import Image
 
+
 import clip
 import json
 import torch
